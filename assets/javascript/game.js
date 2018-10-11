@@ -4,8 +4,13 @@ var currentCharacter = 0;
 var word = [];
 var selectedLetters = [];
 var guessesRemaining = 5;
+var wins = 0;
+var losses = 0;
 $(document).ready(function() {
-    renderWord();
+  renderWord();
+  renderSelectedLetters();
+  renderRemainingGuesses();
+  renderScore();
 });
 
 function renderWord() {
@@ -28,19 +33,23 @@ function renderWord() {
   if (won) {
     alert("Congrats! the word is " + characters[currentCharacter]);
     currentCharacter++;
+    wins++;
     selectedLetters = [];
     guessesRemaining = 5;
     renderWord();
     renderSelectedLetters();
     renderRemainingGuesses();
+    renderScore();
   } else if (guessesRemaining == 0){
     alert("You Lost! Try Again!");
     currentCharacter = 0;
+    losses++;
     selectedLetters = [];
     guessesRemaining = 5;
     renderWord();
     renderSelectedLetters();
     renderRemainingGuesses();
+    renderScore();
   }
 }
 
@@ -53,6 +62,20 @@ function renderSelectedLetters() {
     letter.text(selectedLetters[i]);
     $("#lettersSelected").append(letter);
   }
+}
+
+function renderScore() {
+    $("#score").empty();
+    var winScore = $("<div>");
+    winScore.addClass("letter");
+    winScore.attr("data-letter", wins);
+    winScore.text("Wins: " + wins);
+    $("#score").append(winScore);
+    var lossScore = $("<div>");
+    lossScore.addClass("letter");
+    lossScore.attr("data-letter", losses);
+    lossScore.text("Losses: " + losses);
+    $("#score").append(lossScore);
 }
 
 function renderRemainingGuesses() {
@@ -75,6 +98,7 @@ $(document).keydown(function(event) {
     renderWord();
     renderSelectedLetters();
     renderRemainingGuesses();
+    renderScore();
   }
 
 });
